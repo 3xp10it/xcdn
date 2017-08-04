@@ -17,7 +17,7 @@
 # usage:python3 xcdn.py www.baidu.com
 import time
 import os
-os.system("pip3 install exp10it -U --no-cache")    
+os.system("pip3 install exp10it -U --no-cache-dir")    
 from exp10it import figlet2file
 figlet2file("3xp10it",0,True)
 time.sleep(1)
