@@ -123,7 +123,7 @@ http://www.baidu.com")
         # 这个函数用来刷新本地dns cache
         # 要刷新dns cache才能让修改hosts文件有效
         CLIOutput().good_print("现在刷新系统的dns cache")
-        command = "/etc/init.d/dns-clean start && /etc/init.d/networking force-reload"
+        command = "service network-manager restart && /etc/init.d/networking force-reload"
         os.system(command)
         import time
         time.sleep(3)
@@ -146,19 +146,21 @@ http://www.baidu.com")
     def check_if_ip_is_actual_ip_of_domain(self,ip):
         # 通过修改hosts文件检测ip是否是domain对应的真实ip
         # 如果是则返回True,否则返回False
-        CLIOutput().good_print("现在通过修改hosts文件并刷新dns的方法检测ip:%s是否是domain:%s的真实ip" % (ip,
-            self.domain))
+        #CLIOutput().good_print("现在通过修改hosts文件并刷新dns的方法检测ip:%s是否是domain:%s的真实ip" % (ip,self.domain))
+        #python通过requests库或mechanicalsoup库或selenium_phantomjs来请求时不会被dns缓存影响，只会被hosts文件影响dns解析,人工用浏览器访问域名则会受dns缓存影响
+        CLIOutput().good_print("现在通过修改hosts文件的方法检测ip:%s是否是domain:%s的真实ip" % (ip,self.domain))
         os.system("cp /etc/hosts /etc/hosts.bak")
         self.modify_hosts_file_with_ip_and_domain(ip)
-        self.flush_dns()
-        hosts_changed_domain_title= get_request(self.http_or_https + "://%s" % self.domain,'seleniumPhantomJS')['title']
+        #python通过requests库或mechanicalsoup库或selenium_phantomjs来请求时不会被dns缓存影响，只会被hosts文件影响dns解析,人工用浏览器访问域名则会受dns缓存影响
+        #self.flush_dns()
+        hosts_changed_domain_title= get_request(self.http_or_https + "://%s" % self.domain,'selenium_phantom_js')['title']
         os.system("rm /etc/hosts && mv /etc/hosts.bak /etc/hosts")
         #这里要用title判断,html判断不可以,title相同则认为相同
-        if self.domain_title== hosts_changed_domain_title:
-            print("是的！！！！！！！！！！！！")
+        if self.domain_title == hosts_changed_domain_title:
+            CLIOutput().good_print("检测到真实ip!!!!!!",'red')
             return True
         else:
-            print("不是的！！！！！！！！！！！！")
+            CLIOutput().good_print("当前ip不是域名的真实ip",'yellow')
             return False
 
 
