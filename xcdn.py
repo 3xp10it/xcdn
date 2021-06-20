@@ -19,7 +19,10 @@ import time
 import os
 os.system("pip3 install exp10it -U --no-cache-dir")    
 from exp10it import figlet2file
-figlet2file("3xp10it",0,True)
+try:
+    figlet2file("3xp10it",0,True)
+except:
+    pass
 time.sleep(1)
 
 from exp10it import CLIOutput
