@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #############################################################
 ###                                                  
 ###   ▄▄▄▄                ▄▄▄     ▄▄▄▄    ▀      ▄   
@@ -17,7 +18,11 @@
 # usage:python3 xcdn.py www.baidu.com
 import time
 import os
-os.system("pip3 install exp10it -U --no-cache-dir")    
+try:
+    import exp10it
+except:
+    os.system("pip3 install exp10it")    
+    # os.system("pip3 install exp10it -U --no-cache-dir")    
 from exp10it import figlet2file
 try:
     figlet2file("3xp10it",0,True)
@@ -54,7 +59,7 @@ http://www.baidu.com")
         domainPattern=domain.replace(".","\.")
         #下面的sed的正则中不能有\n,sed匹配\n比较特殊
         #http://stackoverflow.com/questions/1251999/how-can-i-replace-a-newline-n-using-sed
-        command="sed -ri 's/.*\s+%s//' /etc/hosts" % domainPattern
+        command="sudo sed -ri 's/.*\s+%s//' /etc/hosts" % domainPattern
         os.system(command)
 
         self.domain=domain
